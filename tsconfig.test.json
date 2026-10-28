@@ -1,0 +1,1 @@
+{"compilerOptions":{"module":"nodenext","moduleResolution":"nodenext","target":"es2022","outDir":".test","rootDir":"src/lib/pipeline","strict":true,"skipLibCheck":true},"files":["src/lib/pipeline/checks.ts"]}

@@ -1,0 +1,19 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+@layer base {
+  html { background: #FFF9F4; color: #654B56; }
+  body { @apply font-sans antialiased; }
+  h1,h2,h3 { @apply font-serif; color: #4F3743; }
+  :focus-visible { outline: 3px solid #8C9A7B; outline-offset: 2px; border-radius: 8px; }
+}
+@layer components {
+  .btn { @apply inline-flex items-center justify-center rounded-full px-6 py-3 font-medium transition-colors; }
+  .btn-primary { @apply btn bg-rose text-ink-deep shadow-petal hover:bg-rose-deep; }      /* 6.3:1 contrast */
+  .btn-secondary { @apply btn border border-sage/60 bg-transparent text-ink-deep hover:bg-sage-soft; }
+  .card { @apply rounded-card bg-white/80 p-6 shadow-petal ring-1 ring-blush; }
+  /* quiz screens stay calm: no flowers, flat surface */
+  .answer { @apply w-full rounded-2xl border border-blush bg-white px-5 py-4 text-left hover:border-rose; }
+  .answer[aria-checked="true"] { @apply border-rose bg-blush; }
+}
+@keyframes bloom { 0% { transform: scale(.2) rotate(-20deg); opacity: 0 } 60% { opacity: 1 } 100% { transform: scale(1) rotate(0); opacity: 0 } }
+.bloom { animation: bloom 2.2s ease-out forwards; }
+@media (prefers-reduced-motion: reduce) { .bloom { animation: none; opacity: 0 } }

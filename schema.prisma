@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String            @id @default(cuid())
+  email     String            @unique
+  name      String?
+  image     String?
+  createdAt DateTime          @default(now())
+  documents Document[]
+  quizzes   Quiz[]
+  attempts  QuizAttempt[]
+}
+
+model Document {
+  id        String          @id @default(cuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName  String
+  fileType  String
+  sizeBytes Int
+  status    String
+  charCount Int
+  createdAt DateTime        @default(now())
+  chunks    DocumentChunk[]
+  quizzes   Quiz[]
+
+  @@index([userId])
+}
+
+model DocumentChunk {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  idx        Int
+  text       String
+  location   String
+
+  @@index([documentId])
+}
+
+model Quiz {
+  id                 String        @id @default(cuid())
+  userId             String
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId         String
+  document           Document      @relation(fields: [documentId], references: [id])
+  title              String
+  difficulty         String
+  language           String        @default("Kazakh")
+  requestedCount     Int
+  producedCount      Int
+  createdAt          DateTime      @default(now())
+  questions          Question[]
+  attempts           QuizAttempt[]
+
+  @@index([userId, createdAt])
+}
+
+model Question {
+  id             String           @id @default(cuid())
+  quizId         String
+  quiz           Quiz             @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  position       Int
+  type           String           @default("single_choice")
+  text           String
+  explanation    String
+  sourceExcerpt  String
+  sourceLocation String
+  chunkId        String?
+  difficulty     String
+  confidence     Float
+  options        QuestionOption[]
+  answers        Answer[]
+
+  @@index([quizId])
+}
+
+model QuestionOption {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  position   Int
+  text       String
+  isCorrect  Boolean
+}
+
+model QuizAttempt {
+  id           String    @id @default(cuid())
+  quizId       String
+  quiz         Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mistakesOnly Boolean   @default(false)
+  score        Int?
+  total        Int
+  startedAt    DateTime  @default(now())
+  finishedAt   DateTime?
+  answers      Answer[]
+
+  @@index([userId, finishedAt])
+}
+
+model Answer {
+  id               String      @id @default(cuid())
+  attemptId        String
+  attempt          QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId       String
+  question         Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedPosition Int
+  isCorrect        Boolean
+}
+

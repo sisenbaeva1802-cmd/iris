@@ -1,0 +1,32 @@
+{
+  "name": "iris",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test tests/checks.test.mjs"
+  },
+  "dependencies": {
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19",
+    "zod": "^3",
+    "@anthropic-ai/sdk": "latest",
+    "@prisma/client": "^6",
+    "next-auth": "^4.24.11",
+    "pdf-parse": "1.1.1",
+    "mammoth": "^1",
+    "jszip": "^3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "prisma": "^6",
+    "tailwindcss": "^3",
+    "@types/react": "^19",
+    "@types/node": "^22",
+    "@types/react-dom": "^19"
+  }
+}
